@@ -1,3 +1,6 @@
+import "reflect-metadata";
+import { Expose, Type } from "class-transformer";
+
 export enum Genre {
   Horror = "Horror",
   Fantastic = "Fantastic",
@@ -25,33 +28,47 @@ export abstract class Media {
   }
 
   // :> Getter Setter Start
+  @Expose()
   get identifier(): string {
     return this._identifier;
   }
+
   set identifier(identifier: string) {
     this._identifier = identifier;
   }
+
+  @Expose()
   get name(): string {
     return this._name;
   }
+
   set name(name: string) {
     this._name = name;
   }
+
+  @Expose()
   get description(): string {
     return this._description;
   }
+
   set description(description: string) {
     this._description = description;
   }
+
+  @Expose()
   get pictureLocation(): string {
     return this._pictureLocation;
   }
+
   set pictureLocation(pictureLocation: string) {
     this._pictureLocation = pictureLocation;
   }
+
+  @Expose()
   get genre(): Genre {
     return this._genre;
   }
+
   set genre(genre: Genre) {
     this._genre = genre;
   }
@@ -79,21 +96,38 @@ export class MediaCollection<T extends Media> {
   }
 
   // :> Getter Setter Start
+  @Expose()
   get identifier(): string {
     return this._identifier;
   }
+
   set identifier(identifier: string) {
     this._identifier = identifier;
   }
+
+  @Expose()
   get name(): string {
     return this._name;
   }
+
   set name(name: string) {
     this._name = name;
   }
+
+  @Expose()
+  @Type((options) => {
+    if (options) {
+      return (options.newObject as MediaCollection<T>)._type;
+    } else {
+      throw new Error(
+        "Cannot not determine the type because the options object is null or undefined"
+      );
+    }
+  })
   get collection(): ReadonlyArray<T> {
     return this._collection;
   }
+
   set collection(collection: ReadonlyArray<T>) {
     this._collection = collection;
   }

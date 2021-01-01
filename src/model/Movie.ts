@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import { Expose } from "class-transformer";
 import { Genre, Media } from "./Media";
 
 class Movie extends Media {
@@ -17,16 +19,20 @@ class Movie extends Media {
     this._director = director;
   }
   // :> Getter Setter Start
-
+  @Expose()
   get director(): string {
     return this._director;
   }
+
   set director(director: string) {
     this._director = director;
   }
+
+  @Expose()
   get duration(): string {
     return this._duration;
   }
+
   set duration(duration: string) {
     this._duration = duration;
   }

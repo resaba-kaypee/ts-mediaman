@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import { Expose, Type } from "class-transformer";
 import { Genre, Media } from "./Media";
 
 export class Book extends Media {
@@ -18,15 +20,21 @@ export class Book extends Media {
     this._author = author;
   }
   // :> Getter Setter Start
+  @Expose()
   get author(): string {
     return this._author;
   }
+
   set author(author: string) {
     this._author = author;
   }
+
+  @Expose()
+  @Type(() => Number)
   get numberOfPages(): number {
     return this._numberOfPages;
   }
+
   set numberOfPages(numberOfPages: number) {
     this._numberOfPages = numberOfPages;
   }
