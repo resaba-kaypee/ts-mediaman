@@ -54,8 +54,7 @@ export class HTMLMediaManView implements MediaManView {
     }
 
     for (let genreKey in Genre) {
-      // @TODO Genre[genreKey] error on ts maybe Genre.genreKey
-      this._genreOptions += `<option value="${genreKey}">${Genre[genreKey]}</option>">`;
+      this._genreOptions += `<option value="${genreKey}">${genreKey}</option>">`;
     }
   }
 
