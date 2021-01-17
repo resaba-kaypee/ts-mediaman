@@ -1,18 +1,20 @@
+import { Movie } from "./../model/Movie";
+import { Book } from "./../model/Book";
 import "reflect-metadata";
 import localForage from "localforage";
 import { classToPlain, plainToClassFromExist } from "class-transformer";
 
 import { Media, MediaCollection } from "../model/Media";
 
-interface MediaService<T extends Media> {
+export interface MediaService<T extends Media> {
   loadMediaCollection(identifier: string): Promise<MediaCollection<T>>;
   saveMediaCollection(collection: Readonly<MediaCollection<T>>): Promise<void>;
   getMediaCollectionIdentifiersList(): Promise<string[]>;
   removeMediaCollection(identifier: string): Promise<void>;
 }
 
-class MediaServiceImpl<T extends Media> implements MediaService<T> {
-  private readonly _store: localForage;
+export class MediaServiceImpl<T extends Media> implements MediaService<T> {
+  private readonly _store: typeof localForage;
 
   constructor(private _type: Function) {
     console.log(`Initializing media service for ${_type.name}`);
@@ -34,7 +36,7 @@ class MediaServiceImpl<T extends Media> implements MediaService<T> {
     return new Promise<MediaCollection<T>>((resolve, reject) => {
       this._store
         .getItem(identifier)
-        .then((value) => {
+        .then((value: any) => {
           console.log("Found the collection: ", value);
 
           const retrievedCollection = plainToClassFromExist<
@@ -45,7 +47,7 @@ class MediaServiceImpl<T extends Media> implements MediaService<T> {
           console.log("Retrieved collection: ", retrievedCollection);
           resolve(retrievedCollection);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           reject(err); // let the error through
         });
     });
@@ -69,14 +71,14 @@ class MediaServiceImpl<T extends Media> implements MediaService<T> {
 
       this._store
         .setItem(collection.identifier, serializedVersion)
-        .then((value) => {
+        .then((value: any) => {
           console.log(
             `Saved the ${collection.name} collection successfully! Saved value: `,
             value
           );
           resolve();
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(
             `Failed to save the ${collection.name} collection with identifier ${collection.identifier}. Error: ${err}`
           );
@@ -90,11 +92,11 @@ class MediaServiceImpl<T extends Media> implements MediaService<T> {
       console.log("Retrieving the list of media collection identifiers");
       this._store
         .keys()
-        .then((keys) => {
+        .then((keys: any) => {
           console.log("Retrieved the of media collection identifiers: ", keys);
           resolve(keys);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(
             "Failed to retrieve the list of media collection identifiers. Error: ",
             err
@@ -120,10 +122,16 @@ class MediaServiceImpl<T extends Media> implements MediaService<T> {
           console.log(`Removed the ${identifier} collection successfully!`);
           resolve();
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(`Failed to removed the ${identifier} collection`);
           reject(err);
         });
     });
   }
 }
+
+export const bookService = new MediaServiceImpl<Book>(Book);
+console.log("Book service initialized: ", bookService);
+
+export const movieService = new MediaServiceImpl<Movie>(Movie);
+console.log("Movie service initialized: ", movieService);
