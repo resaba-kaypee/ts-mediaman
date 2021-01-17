@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Expose } from "class-transformer";
 import { Genre, Media } from "./Media";
 
-class Movie extends Media {
+export class Movie extends Media {
   private _duration: string;
   private _director: string;
   constructor(
